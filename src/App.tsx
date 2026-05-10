@@ -190,6 +190,70 @@ function App() {
     }
   };
 
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  const runBackendAnalysis = async () => {
+    if (!videoRef.current || !mediaSrc) {
+        alert("動画を読み込んでください。");
+        return;
+    }
+    
+    setIsAnalyzing(true);
+    try {
+        // Fetch the video blob from the object URL
+        const response = await fetch(mediaSrc);
+        const blob = await response.blob();
+        
+        const formData = new FormData();
+        formData.append('file', blob, 'video.mp4');
+        
+        // Call local Python backend
+        const res = await fetch('http://localhost:8000/analyze', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!res.ok) throw new Error('API request failed');
+        const data = await res.json();
+        
+        if (data.status === 'success' && data.tracks) {
+            const scaleX = videoRef.current.videoWidth / (stageSize.width - 64);
+            const scaleY = videoRef.current.videoHeight / (stageSize.height - 64);
+            
+            const newElements: Element[] = [];
+            
+            // Convert tracks to Konva paths
+            Object.entries(data.tracks).forEach(([trackId, pointsArray]: [string, any]) => {
+                if (pointsArray.length < 5) return;
+                
+                const points: number[] = [];
+                pointsArray.forEach((pt: any) => {
+                    points.push(pt.x / scaleX, pt.y / scaleY);
+                });
+                
+                newElements.push({
+                    id: `ai_track_${trackId}`,
+                    type: 'tracking_path',
+                    x: 0,
+                    y: 0,
+                    points: points
+                });
+            });
+            
+            setElements(prev => [...prev, ...newElements]);
+            alert(`${newElements.length}人のトラッキング結果を描画しました！`);
+        } else {
+            alert('トラッキング結果が取得できませんでした。');
+        }
+        
+    } catch (err: any) {
+        console.error(err);
+        alert('解析エラー: ' + err.message + '\nPythonサーバーが起動しているか確認してください。');
+    } finally {
+        setIsAnalyzing(false);
+    }
+  };
+
   const handleMouseDown = (e: any) => {
     if (tool === 'select') return;
     
@@ -392,7 +456,16 @@ function App() {
 
         <div className="section-title" style={{ marginTop: '1.5rem', color: '#8b5cf6' }}>AI Analysis</div>
         <button className={`tool-btn ${tool === 'ai_track' ? 'active' : ''}`} style={tool === 'ai_track' ? { backgroundColor: '#8b5cf6', borderColor: '#8b5cf6', color: 'white' } : { borderColor: '#c4b5fd' }} onClick={() => setTool('ai_track')}>
-          <Target size={18} /> 選手を追跡する
+          <Target size={18} /> 簡易AI (クリック)
+        </button>
+        
+        <button 
+          className="action-btn" 
+          style={{ backgroundColor: '#4f46e5', marginTop: '0.5rem' }} 
+          onClick={runBackendAnalysis}
+          disabled={isAnalyzing}
+        >
+          {isAnalyzing ? '⏳ 解析中...' : '🚀 本格AI解析 (全自動)'}
         </button>
 
         <div style={{ flexGrow: 1 }}></div>
