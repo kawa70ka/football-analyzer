@@ -181,7 +181,7 @@ function App() {
               )}
             </Layer>
             <Layer>
-              {elements.map((el, i) => {
+              {elements.map((el) => {
                 const isDraggable = tool === 'select';
                 if (el.type === 'offense') {
                   return (
