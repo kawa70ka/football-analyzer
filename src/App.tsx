@@ -248,8 +248,9 @@ function App() {
             video.play();
             frame.delete();
 
-        } catch(err) {
+        } catch(err: any) {
             console.error("Failed to init tracking", err);
+            alert('AIトラッキングの初期化に失敗しました: ' + err.message);
         }
         return;
     }
@@ -330,7 +331,13 @@ function App() {
       <video
         ref={videoRef}
         style={{ display: 'none' }}
-        onLoadedData={() => setIsVideoLoaded(true)}
+        onLoadedData={() => {
+            if (videoRef.current) {
+                videoRef.current.width = videoRef.current.videoWidth;
+                videoRef.current.height = videoRef.current.videoHeight;
+            }
+            setIsVideoLoaded(true);
+        }}
         onEnded={() => {
             setIsPlaying(false);
             trackingDataRef.current.active = false;
