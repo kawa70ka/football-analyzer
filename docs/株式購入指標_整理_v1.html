@@ -1,0 +1,465 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>株を買うための指標 総整理</title>
+<style>
+/* ===== 印刷しても背景色を消さない ===== */
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
+
+:root{
+  --ink:#1b2430;
+  --ink-sub:#5a6675;
+  --line:#dfe4ea;
+  --bg:#f6f7f9;
+  --card:#ffffff;
+  --accent:#1f5fa9;
+  --accent-soft:#eaf1fa;
+  --warn:#a8511f;
+  --warn-soft:#fdf1e7;
+  --good:#1d6b4f;
+  --good-soft:#e9f4ef;
+}
+
+html{ background:var(--bg); }
+body{
+  font-family:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.7;
+  line-break:strict;
+  margin:0;
+  padding:0 16px 64px;
+  font-size:15px;
+}
+.wrap{ max-width:900px; margin:0 auto; }
+
+/* ===== ヘッダー ===== */
+header.hero{
+  background:linear-gradient(135deg,#1f5fa9 0%,#154070 100%);
+  color:#fff;
+  border-radius:0 0 14px 14px;
+  padding:36px 28px 30px;
+  margin:0 -16px 28px;
+}
+header.hero .inner{ max-width:900px; margin:0 auto; }
+header.hero h1{
+  font-size:30px; line-height:1.35; margin:0 0 10px; letter-spacing:.02em;
+}
+header.hero p{ margin:0; color:#cfe0f2; font-size:14px; }
+.badge{
+  display:inline-block; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35);
+  border-radius:999px; padding:3px 12px; font-size:12px; margin-bottom:14px;
+}
+
+/* ===== 目次 ===== */
+nav.toc{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:18px 22px; margin-bottom:32px;
+}
+nav.toc h2{ font-size:15px; margin:0 0 10px; color:var(--ink-sub); letter-spacing:.08em; }
+nav.toc ol{ margin:0; padding-left:1.3em; columns:2; column-gap:28px; }
+nav.toc li{ margin:4px 0; break-inside:avoid; }
+nav.toc a{ color:var(--accent); text-decoration:none; font-size:14px; }
+nav.toc a:hover{ text-decoration:underline; }
+
+/* ===== セクション ===== */
+section{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:24px 24px 20px; margin-bottom:22px; break-inside:avoid;
+}
+section > h2{
+  font-size:20px; margin:0 0 4px; padding-bottom:10px; border-bottom:2px solid var(--accent-soft);
+  display:flex; align-items:baseline; gap:10px;
+}
+section > h2 .num{
+  color:#fff; background:var(--accent); border-radius:6px;
+  font-size:13px; padding:2px 9px; flex:none;
+}
+.lead{ color:var(--ink-sub); font-size:13.5px; margin:12px 0 16px; }
+h3{ font-size:16px; margin:22px 0 8px; padding-left:10px; border-left:4px solid var(--accent); }
+
+/* ===== 表 ===== */
+.tw{ overflow-x:auto; margin:10px 0 4px; }
+table{ border-collapse:collapse; width:100%; font-size:13.5px; min-width:620px; }
+th,td{ border:1px solid var(--line); padding:8px 10px; vertical-align:top; text-align:left; }
+th{ background:var(--accent-soft); color:#173e6b; font-weight:600; white-space:nowrap; }
+td:first-child{ font-weight:600; white-space:nowrap; }
+tbody tr:nth-child(even){ background:#fafbfc; }
+.formula{ font-size:12.5px; color:var(--ink-sub); }
+.nw{ white-space:nowrap; }
+
+/* ===== 注記・カード ===== */
+.note{
+  background:var(--warn-soft); border-left:4px solid var(--warn); border-radius:0 8px 8px 0;
+  padding:12px 16px; margin:16px 0; font-size:13.5px; break-inside:avoid;
+}
+.note b{ color:var(--warn); }
+.tip{
+  background:var(--good-soft); border-left:4px solid var(--good); border-radius:0 8px 8px 0;
+  padding:12px 16px; margin:16px 0; font-size:13.5px; break-inside:avoid;
+}
+.tip b{ color:var(--good); }
+
+/* ===== フロー ===== */
+.flow{ counter-reset:step; margin:14px 0 4px; padding:0; list-style:none; }
+.flow li{
+  position:relative; padding:12px 14px 12px 52px; margin-bottom:10px;
+  background:#fafbfc; border:1px solid var(--line); border-radius:10px; break-inside:avoid;
+}
+.flow li::before{
+  counter-increment:step; content:"STEP " counter(step);
+  position:absolute; left:12px; top:12px; width:30px;
+  font-size:10px; font-weight:700; color:var(--accent); line-height:1.2;
+}
+.flow li b{ display:block; font-size:15px; margin-bottom:3px; }
+.flow li span{ font-size:13.5px; color:var(--ink-sub); }
+
+footer{
+  font-size:12px; color:var(--ink-sub); text-align:center;
+  padding:24px 8px 0; border-top:1px solid var(--line); margin-top:28px;
+}
+.disclaimer{
+  background:#fff; border:2px dashed #c9ced6; border-radius:10px;
+  padding:14px 18px; font-size:12.5px; color:var(--ink-sub); margin-top:22px;
+}
+
+/* ===== 印刷 ===== */
+@media print{
+  @page{ size:A4 portrait; margin:12mm; }
+  html,body{ background:#fff; }
+  body{ font-size:10.5pt; padding:0; }
+  header.hero{ border-radius:0; margin:0 0 8mm; }
+  section, table, .note, .tip, .flow li, figure{ break-inside:avoid; }
+  nav.toc{ display:none; }
+  a{ color:var(--ink); text-decoration:none; }
+}
+
+@media (max-width:600px){
+  body{ font-size:14px; }
+  header.hero h1{ font-size:23px; }
+  nav.toc ol{ columns:1; }
+  section{ padding:18px 16px; }
+}
+</style>
+
+<header class="hero">
+  <div class="inner">
+    <span class="badge">投資判断メモ ／ v1</span>
+    <h1>株を買うときに見る指標<br>ぜんぶ整理</h1>
+    <p>バリュエーション・財務・成長・需給・テクニカル・マクロ・定性の7領域＋リスク管理。<br>
+    「何を・どう計算し・どう読むか」を一覧化しました。</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#s1">バリュエーション（割安・割高）</a></li>
+    <li><a href="#s2">収益性・資本効率</a></li>
+    <li><a href="#s3">成長性</a></li>
+    <li><a href="#s4">財務健全性・キャッシュフロー</a></li>
+    <li><a href="#s5">株主還元</a></li>
+    <li><a href="#s6">需給・信用・イベント</a></li>
+    <li><a href="#s7">テクニカル（買うタイミング）</a></li>
+    <li><a href="#s8">マクロ・市場環境</a></li>
+    <li><a href="#s9">定性評価（数字にならない指標）</a></li>
+    <li><a href="#s10">リスク管理・ポートフォリオ</a></li>
+    <li><a href="#s11">指標の落とし穴</a></li>
+    <li><a href="#s12">実践フローとスクリーニング例</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="num">01</span>バリュエーション（割安・割高）</h2>
+  <p class="lead">「その値段は妥当か」を測る指標群。<b>単独では判断できず、同業他社・過去レンジ・成長率とセットで見る</b>のが原則です。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>計算式・定義</th><th>何がわかるか</th><th>読み方の目安</th></tr></thead>
+    <tbody>
+      <tr><td>PER<br><span class="formula">株価収益率</span></td><td class="formula">株価 ÷ 1株利益(EPS)<br>＝時価総額 ÷ 純利益</td><td>利益の何年分の値段が付いているか</td><td>日本株の全体平均は概ね14〜16倍。<b>同業比較と過去5年レンジ</b>で判断。成長株は高くて当然</td></tr>
+      <tr><td>予想PER</td><td class="formula">株価 ÷ 来期予想EPS</td><td>将来利益に対する割安度</td><td>実績PERより実務では重要。会社予想かアナリスト予想かを必ず確認</td></tr>
+      <tr><td>PBR<br><span class="formula">株価純資産倍率</span></td><td class="formula">株価 ÷ 1株純資産(BPS)</td><td>解散価値に対する値段</td><td>1倍割れ＝純資産以下。東証の改善要請でPBR1倍割れは是正圧力・株主還元の材料になりやすい</td></tr>
+      <tr><td>PSR<br><span class="formula">株価売上高倍率</span></td><td class="formula">時価総額 ÷ 売上高</td><td>赤字・先行投資企業の評価</td><td>赤字グロース株用。20倍超は相当な期待込み</td></tr>
+      <tr><td>PCFR</td><td class="formula">株価 ÷ 1株営業CF</td><td>減価償却の影響を除いた割安度</td><td>設備投資が重い製造業・不動産で有効</td></tr>
+      <tr><td>EV/EBITDA</td><td class="formula">(時価総額＋有利子負債−現金) ÷<br>(営業利益＋減価償却費)</td><td>買収目線での割安度。借金・現金込みの実質価格</td><td>「簡易買収倍率」。8倍以下で割安と言われるが業種差大。<b>国際比較に強い</b></td></tr>
+      <tr><td>PEGレシオ</td><td class="formula">PER ÷ 利益成長率(％)</td><td>成長率を加味した割高感</td><td>1倍以下で割安、2倍超で割高が目安。高PER成長株の評価に必須</td></tr>
+      <tr><td>配当利回り</td><td class="formula">1株配当 ÷ 株価 × 100</td><td>インカムの厚み</td><td>日本株平均は約2％台。<b>4％超は減配リスクや株価下落が原因の可能性</b>を疑う</td></tr>
+      <tr><td>益回り</td><td class="formula">1 ÷ PER（EPS÷株価）</td><td>債券利回りとの比較</td><td>益回り − 長期金利＝イールドスプレッド。金利上昇局面では高PERが不利</td></tr>
+      <tr><td>FCF利回り</td><td class="formula">フリーCF ÷ 時価総額</td><td>実際に手元に残る現金ベースの割安度</td><td>会計利益より操作されにくい。5％超なら魅力的</td></tr>
+      <tr><td>ネットキャッシュ比率</td><td class="formula">(現金＋有価証券−有利子負債)<br>÷ 時価総額</td><td>時価総額に占める純現金</td><td>1倍近い＝事業がタダ同然。バリュー株・資産バリュー投資の中核指標</td></tr>
+      <tr><td>ミックス係数</td><td class="formula">PER × PBR</td><td>グレアム流の簡易割安判定</td><td>22.5以下が割安の目安</td></tr>
+      <tr><td>NAV倍率</td><td class="formula">株価 ÷ 1株純資産価値</td><td>REIT・不動産の割安度</td><td>REIT投資での実質的なPBR</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="num">02</span>収益性・資本効率</h2>
+  <p class="lead">「稼ぐ力」と「資本の使い方の上手さ」。長期でリターンを決める最重要領域です。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>計算式・定義</th><th>何がわかるか</th><th>読み方の目安</th></tr></thead>
+    <tbody>
+      <tr><td>ROE<br><span class="formula">自己資本利益率</span></td><td class="formula">純利益 ÷ 自己資本 × 100</td><td>株主のお金でどれだけ稼いだか</td><td><b>8％が最低ライン、15％以上で優良</b>。ただし借金で嵩上げできる点に注意</td></tr>
+      <tr><td>ROA<br><span class="formula">総資産利益率</span></td><td class="formula">純利益 ÷ 総資産 × 100</td><td>資産全体の効率</td><td>5％超で良好。ROEとの差が大きい＝レバレッジが高い</td></tr>
+      <tr><td>ROIC</td><td class="formula">税引後営業利益 ÷ 投下資本</td><td>本業に投じた資本の利回り</td><td><b>ROIC＞WACC</b>なら価値創造。事業ポートフォリオ評価の本命指標</td></tr>
+      <tr><td>デュポン分解</td><td class="formula">ROE＝売上高純利益率×<br>総資産回転率×財務レバレッジ</td><td>ROEの中身（利幅・効率・借金）</td><td>高ROEが「利幅」由来か「借金」由来かを見抜く</td></tr>
+      <tr><td>営業利益率</td><td class="formula">営業利益 ÷ 売上高 × 100</td><td>本業の稼ぐ力・価格支配力</td><td>10％超で優良、20％超は強い参入障壁の示唆</td></tr>
+      <tr><td>売上総利益率<span class="formula">（粗利率）</span></td><td class="formula">売上総利益 ÷ 売上高</td><td>商品・サービスの付加価値</td><td>高く安定＝ブランド力／技術力。低下トレンドは競争激化のサイン</td></tr>
+      <tr><td>総資産回転率</td><td class="formula">売上高 ÷ 総資産</td><td>資産をどれだけ回しているか</td><td>小売は高く、装置産業は低い。業種内比較で見る</td></tr>
+      <tr><td>EPS<br><span class="formula">1株利益</span></td><td class="formula">純利益 ÷ 発行済株式数</td><td>1株あたりの稼ぎ</td><td>株価の長期的な源泉。<b>右肩上がりが理想</b>。自社株買いでも増える</td></tr>
+      <tr><td>BPS</td><td class="formula">純資産 ÷ 発行済株式数</td><td>1株あたりの解散価値</td><td>PBRの分母。積み上がっているかを確認</td></tr>
+      <tr><td>限界利益率・<br>営業レバレッジ</td><td class="formula">(売上−変動費)÷売上／<br>営業利益変化率÷売上変化率</td><td>売上増減が利益に与える増幅度</td><td>高いほど景気敏感。増収局面では利益が跳ねる</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="num">03</span>成長性</h2>
+  <p class="lead">「これから伸びるか」。株価は将来利益の割引現在価値なので、実質ここが本丸です。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>計算式・定義</th><th>何がわかるか</th><th>読み方の目安</th></tr></thead>
+    <tbody>
+      <tr><td>増収率</td><td class="formula">(今期売上−前期売上)÷前期売上</td><td>事業規模の拡大ペース</td><td>グロース株は年20％以上が一つの基準。<b>3〜5年のCAGR</b>で均す</td></tr>
+      <tr><td>営業利益<br>成長率</td><td class="formula">同上（営業利益ベース）</td><td>本業の伸び</td><td>増収率＞増益率の逆転が続くならコスト構造を確認</td></tr>
+      <tr><td>EPS成長率</td><td class="formula">同上（EPSベース）</td><td>株主目線の成長</td><td>増資による希薄化を織り込める。純利益成長率より実質的</td></tr>
+      <tr><td>CAGR</td><td class="formula">(終値÷始値)^(1/年数)−1</td><td>ならした年平均成長率</td><td>単年のブレを排除。5年・10年で見る</td></tr>
+      <tr><td>会社計画<br>進捗率</td><td class="formula">四半期累計実績 ÷ 通期計画</td><td>上方修正・下方修正の兆し</td><td>Q2で50％超なら順調。季節性の確認は必須</td></tr>
+      <tr><td>受注残高・<br>受注高</td><td class="formula">開示ベース</td><td>将来売上の先行指標</td><td>機械・建設・半導体装置で特に重要</td></tr>
+      <tr><td>業績予想の<br>リビジョン</td><td class="formula">アナリスト予想の上方修正比率</td><td>市場の期待の変化方向</td><td><b>上方修正トレンドは株価に効きやすい</b>（モメンタム要因）</td></tr>
+      <tr><td>サプライズ率</td><td class="formula">(実績−コンセンサス)÷コンセンサス</td><td>決算の驚き度</td><td>プラスサプライズ後は株価が続伸しやすい傾向（PEAD）</td></tr>
+      <tr><td>SaaS系KPI</td><td class="formula">ARR／解約率／LTV/CAC／NRR</td><td>サブスク企業の実質成長</td><td>NRR 120％超は優良。会計利益より実態を映す</td></tr>
+      <tr><td>TAM<br><span class="formula">市場規模</span></td><td class="formula">狙える市場の総額</td><td>成長の天井</td><td>シェア×TAMで将来売上の上限を試算</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="num">04</span>財務健全性・キャッシュフロー</h2>
+  <p class="lead">「潰れないか」。ここが弱いと、どれだけ割安でも投資は成立しません。<b>最初に確認すべき足切り条件</b>です。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>計算式・定義</th><th>何がわかるか</th><th>読み方の目安</th></tr></thead>
+    <tbody>
+      <tr><td>自己資本比率</td><td class="formula">自己資本 ÷ 総資産 × 100</td><td>資本の厚み</td><td>製造業なら40％以上が安心。20％未満は要注意（金融・不動産は例外）</td></tr>
+      <tr><td>流動比率</td><td class="formula">流動資産 ÷ 流動負債 × 100</td><td>1年内の支払い能力</td><td>150％以上が目安、100％割れは資金繰り注意</td></tr>
+      <tr><td>当座比率</td><td class="formula">当座資産 ÷ 流動負債 × 100</td><td>在庫を除いた即応力</td><td>100％以上が理想</td></tr>
+      <tr><td>D/Eレシオ</td><td class="formula">有利子負債 ÷ 自己資本</td><td>借入依存度</td><td>1倍以下が目安。金利上昇局面では特に効く</td></tr>
+      <tr><td>ネットデット<br>/EBITDA</td><td class="formula">(有利子負債−現金) ÷ EBITDA</td><td>返済に何年かかるか</td><td>3倍以下が健全、5倍超は財務リスク</td></tr>
+      <tr><td>インタレスト・<br>カバレッジ</td><td class="formula">(営業利益＋受取利息配当) ÷ 支払利息</td><td>利払い余力</td><td>10倍以上で安心、2倍未満は危険水域</td></tr>
+      <tr><td>営業CF</td><td class="formula">本業で稼いだ現金</td><td>利益の「現金裏付け」</td><td><b>営業CFがマイナス、または純利益を大きく下回る状態が続く企業は避ける</b></td></tr>
+      <tr><td>CFマージン</td><td class="formula">営業CF ÷ 売上高</td><td>現金創出力</td><td>10％超で良好</td></tr>
+      <tr><td>フリーCF</td><td class="formula">営業CF − 設備投資</td><td>自由に使える現金</td><td>配当・自社株買い・借金返済の原資。プラス継続が理想</td></tr>
+      <tr><td>CFの組み合わせ</td><td class="formula">営業＋／投資−／財務−</td><td>企業のライフステージ</td><td>この形が最も健全（稼いで投資して返済）</td></tr>
+      <tr><td>棚卸資産<br>回転日数</td><td class="formula">棚卸資産 ÷ 売上原価 × 365</td><td>在庫の滞留</td><td>急増＝売れ残り・将来の評価損の予兆</td></tr>
+      <tr><td>売上債権<br>回転日数</td><td class="formula">売掛金 ÷ 売上高 × 365</td><td>回収の健全性</td><td>売上と不釣り合いな急増は「押し込み販売」の疑い</td></tr>
+      <tr><td>CCC</td><td class="formula">在庫日数＋債権日数−債務日数</td><td>現金が寝ている期間</td><td>短いほど優秀。マイナスなら極めて強い（前受金モデル）</td></tr>
+      <tr><td>のれん／<br>純資産</td><td class="formula">のれん ÷ 自己資本</td><td>減損リスクの大きさ</td><td>比率が高いほど、買収失敗時の一発損失が大きい</td></tr>
+      <tr><td>継続企業の<br>前提(GC)注記</td><td class="formula">有報・短信の注記</td><td>倒産リスクの明示</td><td>注記があれば原則<b>投資対象外</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>財務は「足切り」に使う。</b>割安さや成長性は程度問題ですが、資金繰り・GC注記・営業CFマイナス継続は<b>Yes/Noの門番</b>として最初に使うのが効率的です。</div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="num">05</span>株主還元</h2>
+  <p class="lead">日本株では東証の資本効率改善要請以降、還元姿勢そのものが株価材料になっています。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>計算式・定義</th><th>何がわかるか</th><th>読み方の目安</th></tr></thead>
+    <tbody>
+      <tr><td>配当性向</td><td class="formula">配当総額 ÷ 純利益 × 100</td><td>還元の余力と持続性</td><td>30〜50％が健全。<b>100％超は減配リスク</b>、逆に低すぎは還元姿勢が弱い</td></tr>
+      <tr><td>DOE</td><td class="formula">配当総額 ÷ 自己資本</td><td>利益変動に左右されない還元</td><td>DOE目標を掲げる企業は減配しにくい</td></tr>
+      <tr><td>総還元性向</td><td class="formula">(配当＋自社株買い) ÷ 純利益</td><td>還元の総量</td><td>自社株買いを含めた実質的な株主還元</td></tr>
+      <tr><td>連続増配年数</td><td class="formula">実績ベース</td><td>還元の継続意思とビジネスの安定性</td><td>10年以上は強いシグナル</td></tr>
+      <tr><td>自社株買い<br>発表・進捗</td><td class="formula">取得枠 ÷ 時価総額</td><td>需給改善＋EPS押し上げ</td><td>枠が時価総額の3％超なら影響大。<b>発表だけで実行しない企業もある</b>ので進捗を確認</td></tr>
+      <tr><td>株主優待</td><td class="formula">優待額 ÷ 投資額</td><td>個人投資家の需給下支え</td><td>優待廃止リスクと、優待込み利回りの過信に注意</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="num">06</span>需給・信用・イベント</h2>
+  <p class="lead">短〜中期の株価は「業績」より「誰が買って誰が売るか」で動きます。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>計算式・定義</th><th>何がわかるか</th><th>読み方の目安</th></tr></thead>
+    <tbody>
+      <tr><td>信用倍率</td><td class="formula">信用買残 ÷ 信用売残</td><td>将来の売り圧力／買い戻し圧力</td><td>買残が多い＝上値が重い。1倍未満（売り長）は踏み上げ余地</td></tr>
+      <tr><td>信用買残／<br>出来高</td><td class="formula">買残 ÷ 平均出来高</td><td>しこりの解消にかかる日数</td><td>大きいほど戻り売りが重い</td></tr>
+      <tr><td>空売り比率・<br>残高報告</td><td class="formula">空売り金額 ÷ 売買代金</td><td>ヘッジファンドの弱気度</td><td>極端な高水準は反発（踏み上げ）の芽</td></tr>
+      <tr><td>売買代金・<br>流動性</td><td class="formula">1日平均売買代金</td><td>いつでも売れるか</td><td><b>個人でも最低1日1億円程度は欲しい</b>。低流動性は下落時に逃げられない</td></tr>
+      <tr><td>浮動株比率</td><td class="formula">市場流通株 ÷ 発行済株式</td><td>値動きの軽さ</td><td>低いほど急騰・急落しやすい</td></tr>
+      <tr><td>投資部門別<br>売買動向</td><td class="formula">JPX週次データ</td><td>外国人・個人・機関の売買方向</td><td>日本株は外国人の売買が主導要因</td></tr>
+      <tr><td>大株主・<br>大量保有報告</td><td class="formula">5％ルール報告</td><td>アクティビスト参入・親子関係</td><td>アクティビスト登場は還元強化・再編の触媒</td></tr>
+      <tr><td>イベント</td><td class="formula">決算日／指数採用／株式分割／<br>TOB・MBO／増資・転換社債</td><td>短期の需給インパクト</td><td>増資・CBは希薄化で下落要因。指数採用はパッシブ買いが入る</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <h2><span class="num">07</span>テクニカル（買うタイミング）</h2>
+  <p class="lead">「何を買うか」がファンダメンタルズなら、テクニカルは<b>「いつ買うか」</b>。トレンド系と逆張り系を混同しないのがコツです。</p>
+
+  <h3>トレンド系（方向を見る）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>定義</th><th>使い方</th></tr></thead>
+    <tbody>
+      <tr><td>移動平均線<br><span class="formula">SMA/EMA</span></td><td class="formula">一定期間の平均株価（5・25・75・200日）</td><td>株価が上向きの25日・75日線の上＝上昇トレンド。<b>200日線は長期の生命線</b></td></tr>
+      <tr><td>ゴールデン／<br>デッドクロス</td><td class="formula">短期線が長期線を上抜け／下抜け</td><td>トレンド転換の代表シグナル。遅行するのでダマシもある</td></tr>
+      <tr><td>MACD</td><td class="formula">短期EMA−長期EMA と そのシグナル線</td><td>0ラインより上でのGCは信頼度が高い</td></tr>
+      <tr><td>一目均衡表</td><td class="formula">転換線・基準線・雲・遅行線</td><td>雲の上抜けで強気転換。雲の厚みが抵抗の強さ</td></tr>
+      <tr><td>トレンドライン／<br>支持・抵抗線</td><td class="formula">安値同士・高値同士を結ぶ</td><td>ブレイクでエントリー、割れで撤退という機械的判断ができる</td></tr>
+      <tr><td>DMI／ADX</td><td class="formula">上昇圧力・下降圧力の強さ</td><td>ADX上昇＝トレンド発生中。逆張り指標を封印する判断に</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>オシレーター系（行き過ぎを見る）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>定義</th><th>使い方</th></tr></thead>
+    <tbody>
+      <tr><td>RSI</td><td class="formula">一定期間の値上がり幅の割合（0〜100）</td><td>30以下で売られすぎ、70以上で買われすぎ。<b>強いトレンド中は機能しない</b></td></tr>
+      <tr><td>ストキャス<br>ティクス</td><td class="formula">直近レンジ内での位置</td><td>%Kと%Dのクロスで転換を見る。ボックス相場向き</td></tr>
+      <tr><td>ボリンジャー<br>バンド</td><td class="formula">移動平均±標準偏差(σ)</td><td>−2σタッチで反発狙い／バンドウォークならトレンド継続と読む（真逆なので注意）</td></tr>
+      <tr><td>RCI</td><td class="formula">時間と価格の順位相関</td><td>−80以下からの反転で買い</td></tr>
+      <tr><td>移動平均<br>乖離率</td><td class="formula">(株価−移動平均)÷移動平均</td><td>25日線から−15％以上は短期リバウンド狙いの目安</td></tr>
+      <tr><td>騰落レシオ</td><td class="formula">値上がり銘柄数 ÷ 値下がり銘柄数</td><td>市場全体の過熱感。70以下で底値圏、120超で過熱</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>出来高・ボラティリティ</h3>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>定義</th><th>使い方</th></tr></thead>
+    <tbody>
+      <tr><td>出来高</td><td class="formula">売買された株数</td><td><b>出来高を伴わない上昇は続かない</b>。ブレイクの信頼性判定に必須</td></tr>
+      <tr><td>VWAP</td><td class="formula">出来高加重平均価格</td><td>その日の平均コスト。上にいれば買い方優位</td></tr>
+      <tr><td>ATR</td><td class="formula">平均的な値幅</td><td>損切り幅とポジションサイズの設計に使う</td></tr>
+      <tr><td>ヒストリカル<br>ボラティリティ</td><td class="formula">価格変動率の標準偏差</td><td>低ボラ収縮後は大きな動きが出やすい</td></tr>
+      <tr><td>相対力<br><span class="formula">RS</span></td><td class="formula">個別株の騰落率 ÷ 指数の騰落率</td><td>市場より強い銘柄を選ぶ。モメンタム投資の中核</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>組み合わせの原則。</b>同じ系統の指標を重ねても情報は増えません。「トレンド系1つ＋オシレーター1つ＋出来高」の3点で十分です。</div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section id="s8">
+  <h2><span class="num">08</span>マクロ・市場環境</h2>
+  <p class="lead">個別株のリターンの相当部分は「相場全体」と「セクター」で決まります。銘柄選びの前に環境を見ます。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>何を見るか</th><th>株式への影響</th></tr></thead>
+    <tbody>
+      <tr><td>政策金利・<br>長期金利</td><td class="formula">日銀の政策金利、10年国債利回り、FRBのFF金利</td><td>金利上昇＝割引率上昇でハイバリュエーション株に逆風。銀行・保険には追い風</td></tr>
+      <tr><td>為替<br><span class="formula">ドル円等</span></td><td class="formula">水準とトレンド</td><td>円安＝輸出・海外売上比率の高い企業に有利、内需・輸入依存には不利</td></tr>
+      <tr><td>イールド<br>カーブ</td><td class="formula">長短金利差</td><td>逆イールドは景気後退の先行シグナルとされる</td></tr>
+      <tr><td>インフレ率</td><td class="formula">CPI・PPI</td><td>価格転嫁力のある企業が優位。原材料高はマージンを圧迫</td></tr>
+      <tr><td>景気指標</td><td class="formula">ISM製造業、雇用統計、日銀短観、鉱工業生産</td><td>景気敏感株（素材・機械・海運）とディフェンシブ株の切り替え判断</td></tr>
+      <tr><td>商品市況</td><td class="formula">原油・銅・半導体市況(DRAM等)・海運運賃</td><td>該当セクターの業績を直接左右する</td></tr>
+      <tr><td>VIX指数</td><td class="formula">恐怖指数</td><td>30超＝パニック。逆張りの買い場になりやすい</td></tr>
+      <tr><td>市場全体の<br>PER・PBR</td><td class="formula">日経平均・TOPIXの加重PER</td><td>相場全体の割高・割安の基準線</td></tr>
+      <tr><td>バフェット<br>指標</td><td class="formula">株式時価総額 ÷ 名目GDP</td><td>100％超で過熱圏という長期の目安</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 9 ============ -->
+<section id="s9">
+  <h2><span class="num">09</span>定性評価（数字にならない指標）</h2>
+  <p class="lead">長期投資では、実はここの差が最終リターンを分けます。決算短信より<b>有価証券報告書・統合報告書・説明会資料</b>から読み取ります。</p>
+  <div class="tw"><table>
+    <thead><tr><th>観点</th><th>確認すること</th><th>良い状態</th></tr></thead>
+    <tbody>
+      <tr><td>ビジネス<br>モデル</td><td class="formula">誰から、何で、どう儲けているか。ストック型かフロー型か</td><td>反復収益（サブスク・保守・消耗品）の比率が高い</td></tr>
+      <tr><td>経済的な堀<br><span class="formula">モート</span></td><td class="formula">ブランド／特許／ネットワーク効果／スイッチングコスト／コスト優位／規制</td><td>高い利益率が何年も維持できている＝堀の実証</td></tr>
+      <tr><td>競争環境</td><td class="formula">5フォース分析、シェア推移、値上げできるか</td><td>寡占・シェア上昇・価格支配力あり</td></tr>
+      <tr><td>経営陣</td><td class="formula">創業者か、在任期間、過去の計画達成率、資本配分の巧拙</td><td>掲げた中計を達成してきた実績がある</td></tr>
+      <tr><td>株主構成・<br>ガバナンス</td><td class="formula">親会社の有無、社外取締役比率、政策保有株、経営陣の持株比率</td><td>経営陣が株を多く持つ＝利害一致。親子上場は少数株主が不利になりやすい</td></tr>
+      <tr><td>成長ドライバー</td><td class="formula">新製品、海外展開、値上げ、M&amp;A、構造改革</td><td>複数あり、進捗が定量開示されている</td></tr>
+      <tr><td>リスク要因</td><td class="formula">特定顧客・特定製品への依存、規制変更、訴訟、地政学</td><td>売上の分散が効いている</td></tr>
+      <tr><td>ESG・<br>非財務</td><td class="formula">脱炭素対応、人的資本、不祥事履歴</td><td>機関投資家の投資対象から外れる要因がない</td></tr>
+      <tr><td>IR姿勢</td><td class="formula">開示の丁寧さ、悪材料を先に出すか、中計の現実性</td><td>都合の悪い数字も出す企業は信頼できる</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 10 ============ -->
+<section id="s10">
+  <h2><span class="num">10</span>リスク管理・ポートフォリオ</h2>
+  <p class="lead">「何を買うか」と同じくらい、<b>「いくら買うか」「どこで降りるか」</b>が成績を決めます。</p>
+  <div class="tw"><table>
+    <thead><tr><th>指標・ルール</th><th>定義</th><th>使い方</th></tr></thead>
+    <tbody>
+      <tr><td>ベータ(β)</td><td class="formula">市場全体に対する感応度</td><td>1超＝市場より値動きが荒い。ポートフォリオ全体のβを意識する</td></tr>
+      <tr><td>ボラティリティ</td><td class="formula">値動きの大きさ（年率）</td><td>同じ金額でも高ボラ株はリスク量が大きい</td></tr>
+      <tr><td>シャープ<br>レシオ</td><td class="formula">(リターン−無リスク金利) ÷ 標準偏差</td><td>リスクに見合ったリターンか。1超で良好</td></tr>
+      <tr><td>最大<br>ドローダウン</td><td class="formula">高値からの最大下落率</td><td>自分が耐えられる下落幅を先に決める</td></tr>
+      <tr><td>相関係数</td><td class="formula">銘柄間の値動きの連動性</td><td>低相関の組み合わせで分散効果。同一セクター偏重を避ける</td></tr>
+      <tr><td>ポジション<br>サイジング</td><td class="formula">1銘柄あたり資産の何％まで</td><td>1銘柄5〜10％、1回の損失は総資産の1〜2％以内が定石</td></tr>
+      <tr><td>損切りルール</td><td class="formula">−8〜10％、または直近安値・移動平均割れ</td><td><b>買う前に決める。</b>買った後に決めると必ず動かしてしまう</td></tr>
+      <tr><td>売却ルール</td><td class="formula">目標株価到達／投資仮説の崩壊／より良い代替先</td><td>「株価が下がったから」ではなく「前提が崩れたか」で判断する</td></tr>
+      <tr><td>時間分散</td><td class="formula">分割購入・積立</td><td>タイミングを外すリスクを平準化</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 11 ============ -->
+<section id="s11">
+  <h2><span class="num">11</span>指標の落とし穴</h2>
+  <p class="lead">指標は「使えば安全」ではなく、誤読すると逆に危険です。頻出のワナをまとめます。</p>
+  <div class="tw"><table>
+    <thead><tr><th>ワナ</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>低PERの罠</td><td>PERが低いのは「割安」ではなく「市場が将来の減益を織り込んでいる」ケースが多い。特に景気敏感株は<b>業績ピークでPERが最低になる</b></td></tr>
+      <tr><td>特別利益に<br>よる歪み</td><td>資産売却益で純利益が膨らむとPERが不自然に下がる。経常利益・営業利益で確認する</td></tr>
+      <tr><td>PBRの罠</td><td>純資産に含まれる不良在庫・回収不能債権・のれんは実質価値がない。低PBRのまま10年放置される銘柄も多い（バリュートラップ）</td></tr>
+      <tr><td>高ROEの罠</td><td>自社株買いや借入で自己資本を減らせばROEは上がる。<b>ROAと併せて見る</b></td></tr>
+      <tr><td>高配当の罠</td><td>株価下落で利回りが上がっているだけの場合がある。配当性向とFCFで持続性を確認</td></tr>
+      <tr><td>黒字倒産</td><td>利益が出ていても営業CFがマイナスなら資金は尽きる。利益よりキャッシュ</td></tr>
+      <tr><td>業種間の<br>単純比較</td><td>銀行のPBR、商社のPER、SaaSのPSRは水準が全く違う。<b>比較は必ず同業種内で</b></td></tr>
+      <tr><td>過去実績への<br>依存</td><td>財務諸表は過去の記録。株価は未来を織り込む。実績PERだけで判断しない</td></tr>
+      <tr><td>指標の<br>盛りすぎ</td><td>条件を足すほど「過去に上手くいった組み合わせ」に最適化されるだけ（カーブフィッティング）。5〜7個に絞る</td></tr>
+      <tr><td>テクニカルの<br>使い所違い</td><td>トレンド相場でRSI逆張り、ボックス相場で移動平均クロス、はどちらも負けやすい。相場つきを先に判定する</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 12 ============ -->
+<section id="s12">
+  <h2><span class="num">12</span>実践フローとスクリーニング例</h2>
+  <p class="lead">全指標を同時に見るのは不可能です。<b>絞り込む順番</b>を決めるのが実務のコツです。</p>
+
+  <ol class="flow">
+    <li><b>環境判定（マクロ）</b><span>金利・為替・市場全体のPER・VIXから、強気／弱気とどのセクターが有利かを決める</span></li>
+    <li><b>足切り（財務健全性）</b><span>自己資本比率・営業CF・GC注記・流動性で「触ってはいけない銘柄」を除外する</span></li>
+    <li><b>スクリーニング（定量）</b><span>バリュエーション＋収益性＋成長性の条件で数十銘柄まで機械的に絞る</span></li>
+    <li><b>個別精査（定性）</b><span>ビジネスモデル・堀・経営陣・投資仮説を言語化。「なぜ市場はこれを安く放置しているのか」に答えを出す</span></li>
+    <li><b>タイミング（テクニカル・需給）</b><span>トレンド・出来高・信用需給を見てエントリー価格を決める</span></li>
+    <li><b>サイズと出口を先に決める</b><span>投入額・損切り価格・売却条件を買う前に紙に書く</span></li>
+  </ol>
+
+  <h3>スクリーニング条件の型（例）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>スタイル</th><th>条件の例</th><th>狙い</th></tr></thead>
+    <tbody>
+      <tr><td>割安バリュー</td><td class="formula">PER 12倍以下／PBR 1倍以下／自己資本比率50％以上／営業CF黒字／配当利回り3％以上／ネットキャッシュ厚め</td><td>下値が固く、見直し買いで報われる銘柄</td></tr>
+      <tr><td>クオリティ<br>グロース</td><td class="formula">ROE 15％以上（3年継続）／営業利益率10％以上／増収率10％以上／有利子負債少／FCF黒字</td><td>長期で複利的に価値が増える企業</td></tr>
+      <tr><td>高配当・<br>インカム</td><td class="formula">配当利回り3.5％以上／配当性向70％以下／減配歴なし／営業CFが配当を十分カバー</td><td>安定したキャッシュフロー獲得</td></tr>
+      <tr><td>モメンタム</td><td class="formula">株価が25日・75日線の上／52週高値圏／上方修正あり／出来高増加／相対力が指数超</td><td>買われている銘柄に乗る</td></tr>
+      <tr><td>カタリスト<br>狙い</td><td class="formula">PBR1倍割れ＋高自己資本比率＋アクティビスト保有／自社株買い発表／構造改革発表</td><td>是正圧力による再評価</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tip"><b>最低限これだけは、という5指標。</b>迷ったら「①営業CF（潰れないか）②ROE・営業利益率（稼ぐ力）③EPS成長率（伸びるか）④予想PERまたはEV/EBITDA（値段は妥当か）⑤売買代金（逃げられるか）」。この5つで大半のふるい分けができます。</div>
+</section>
+
+<div class="disclaimer">
+  <b>ご注意</b>：本資料は投資指標に関する一般的な整理であり、特定銘柄の売買を推奨するものではありません。数値の目安は市場環境・業種により大きく変わります。実際の投資判断はご自身の責任でお願いします。記載の指標は、決算短信・有価証券報告書・証券会社のスクリーニングツール等で確認できます。
+</div>
+
+<footer>
+  株を買うための指標 総整理 ／ v1 ／ 2026-09-08 作成
+</footer>
+
+</div>
