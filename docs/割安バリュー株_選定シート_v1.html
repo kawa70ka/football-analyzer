@@ -1,0 +1,334 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>日本株 割安バリュー 中期投資 選定シート</title>
+<style>
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-sizing: border-box; }
+:root{
+  --ink:#1b2430; --ink-sub:#5a6675; --line:#dfe4ea; --bg:#f6f7f9; --card:#fff;
+  --accent:#1f5fa9; --accent-soft:#eaf1fa;
+  --warn:#a8511f; --warn-soft:#fdf1e7;
+  --good:#1d6b4f; --good-soft:#e9f4ef;
+  --alert:#a02c2c; --alert-soft:#fbecec;
+}
+html{ background:var(--bg); }
+body{
+  font-family:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+  color:var(--ink); background:var(--bg); line-height:1.7; line-break:strict;
+  margin:0; padding:0 16px 64px; font-size:15px;
+}
+.wrap{ max-width:900px; margin:0 auto; }
+header.hero{
+  background:linear-gradient(135deg,#1d6b4f 0%,#124834 100%);
+  color:#fff; border-radius:0 0 14px 14px; padding:36px 28px 30px; margin:0 -16px 26px;
+}
+header.hero .inner{ max-width:900px; margin:0 auto; }
+header.hero h1{ font-size:29px; line-height:1.35; margin:0 0 10px; }
+header.hero p{ margin:0; color:#cfe8dd; font-size:14px; }
+.badge{
+  display:inline-block; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35);
+  border-radius:999px; padding:3px 12px; font-size:12px; margin-bottom:14px;
+}
+.cond{
+  display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;
+}
+.cond span{
+  background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3);
+  border-radius:6px; padding:4px 11px; font-size:12.5px;
+}
+section{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:24px 24px 20px; margin-bottom:22px; break-inside:avoid;
+}
+section > h2{
+  font-size:20px; margin:0 0 4px; padding-bottom:10px; border-bottom:2px solid var(--accent-soft);
+  display:flex; align-items:baseline; gap:10px;
+}
+section > h2 .num{ color:#fff; background:var(--accent); border-radius:6px; font-size:13px; padding:2px 9px; flex:none; }
+.lead{ color:var(--ink-sub); font-size:13.5px; margin:12px 0 16px; }
+h3{ font-size:16px; margin:22px 0 8px; padding-left:10px; border-left:4px solid var(--accent); }
+.tw{ overflow-x:auto; margin:10px 0 4px; }
+table{ border-collapse:collapse; width:100%; font-size:13.5px; min-width:600px; }
+th,td{ border:1px solid var(--line); padding:8px 10px; vertical-align:top; text-align:left; }
+th{ background:var(--accent-soft); color:#173e6b; font-weight:600; white-space:nowrap; }
+td:first-child{ font-weight:600; }
+tbody tr:nth-child(even){ background:#fafbfc; }
+.formula{ font-size:12.5px; color:var(--ink-sub); }
+.nw{ white-space:nowrap; }
+.note{ background:var(--warn-soft); border-left:4px solid var(--warn); border-radius:0 8px 8px 0; padding:12px 16px; margin:16px 0; font-size:13.5px; break-inside:avoid; }
+.note b{ color:var(--warn); }
+.tip{ background:var(--good-soft); border-left:4px solid var(--good); border-radius:0 8px 8px 0; padding:12px 16px; margin:16px 0; font-size:13.5px; break-inside:avoid; }
+.tip b{ color:var(--good); }
+.alert{ background:var(--alert-soft); border-left:4px solid var(--alert); border-radius:0 8px 8px 0; padding:14px 18px; margin:0 0 22px; font-size:13.5px; break-inside:avoid; }
+.alert b{ color:var(--alert); }
+.kpi{ display:flex; flex-wrap:wrap; gap:12px; margin:14px 0 6px; }
+.kpi div{
+  flex:1 1 150px; background:#fafbfc; border:1px solid var(--line);
+  border-radius:10px; padding:12px 14px; break-inside:avoid;
+}
+.kpi .lbl{ font-size:11.5px; color:var(--ink-sub); display:block; margin-bottom:2px; }
+.kpi .val{ font-size:21px; font-weight:700; color:var(--accent); line-height:1.3; }
+.kpi .sub{ font-size:11.5px; color:var(--ink-sub); display:block; margin-top:2px; }
+.chk{ list-style:none; padding:0; margin:10px 0; }
+.chk li{ padding:7px 0 7px 28px; position:relative; border-bottom:1px dotted var(--line); font-size:13.5px; }
+.chk li::before{ content:""; position:absolute; left:2px; top:11px; width:13px; height:13px; border:2px solid var(--accent); border-radius:3px; }
+.flow{ counter-reset:step; margin:14px 0 4px; padding:0; list-style:none; }
+.flow li{ position:relative; padding:12px 14px 12px 52px; margin-bottom:10px; background:#fafbfc; border:1px solid var(--line); border-radius:10px; break-inside:avoid; }
+.flow li::before{ counter-increment:step; content:"STEP " counter(step); position:absolute; left:12px; top:12px; width:30px; font-size:10px; font-weight:700; color:var(--accent); line-height:1.2; }
+.flow li b{ display:block; font-size:15px; margin-bottom:3px; }
+.flow li span{ font-size:13.5px; color:var(--ink-sub); }
+.tag{ display:inline-block; font-size:11px; padding:1px 7px; border-radius:4px; margin-left:6px; vertical-align:middle; white-space:nowrap; }
+.tag-v{ background:#fdf1e7; color:var(--warn); border:1px solid #edc7a8; }
+footer{ font-size:12px; color:var(--ink-sub); text-align:center; padding:24px 8px 0; border-top:1px solid var(--line); margin-top:28px; }
+.disclaimer{ background:#fff; border:2px dashed #c9ced6; border-radius:10px; padding:14px 18px; font-size:12.5px; color:var(--ink-sub); margin-top:22px; }
+@media print{
+  @page{ size:A4 portrait; margin:12mm; }
+  html,body{ background:#fff; }
+  body{ font-size:10.5pt; padding:0; }
+  header.hero{ border-radius:0; margin:0 0 8mm; }
+  section, table, .note, .tip, .alert, .flow li, .kpi div{ break-inside:avoid; }
+  a{ color:var(--ink); text-decoration:none; }
+}
+@media (max-width:600px){
+  body{ font-size:14px; }
+  header.hero h1{ font-size:22px; }
+  section{ padding:18px 16px; }
+}
+</style>
+
+<header class="hero">
+  <div class="inner">
+    <span class="badge">銘柄選定シート ／ v1 ／ 2026-09-08</span>
+    <h1>日本株・割安バリュー<br>中期（半年〜2年）の選定シート</h1>
+    <p>相場環境の把握 → スクリーニング条件 → 個別チェック → 売買ルールまでを1枚に。</p>
+    <div class="cond">
+      <span>市場：日本株</span><span>スタイル：割安バリュー</span><span>期間：半年〜2年</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="alert">
+  <b>最初にお伝えすべきこと（データ取得の制約）</b><br>
+  この作業環境は、証券会社・株価情報サイト（日経、Yahoo!ファイナンス、みんかぶ、株探、IRBANK、JPX 等）への接続が
+  ネットワークポリシーで<b>すべて遮断されています</b>。そのため、<b>個別銘柄の最新の株価・PBR・配当利回りを私自身が直接検証することはできません</b>。<br>
+  以下のうち、<b>相場環境（金利・指数・PBR1倍割れ比率）はWeb検索経由で日付と出典を確認できた情報</b>、
+  <b>個別銘柄名は検索結果に登場しただけの「未検証の出発点」</b>です。数値は必ずご自身で最新値を確認してください。
+</div>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="num">01</span>いまの相場環境（2026年9月上旬）</h2>
+
+  <div class="kpi">
+    <div><span class="lbl">日経平均（9/4終値）</span><span class="val">65,020円</span><span class="sub">年初来高値 72,831円(6/22)<br>年初来安値 50,558円(3/31)</span></div>
+    <div><span class="lbl">日銀 政策金利</span><span class="val">1.00%</span><span class="sub">6月に0.75→1.00%<br>7月は据え置き</span></div>
+    <div><span class="lbl">9月利上げ観測</span><span class="val">織り込み8割前後</span><span class="sub">野村は9月・27年1月・4月の<br>利上げをメインシナリオ</span></div>
+    <div><span class="lbl">PBR1倍割れ比率</span><span class="val">約20%</span><span class="sub">TOPIX500ベース<br>2018年以来の低水準</span></div>
+  </div>
+
+  <h3>この環境が「割安バリュー・中期」に意味すること</h3>
+  <div class="tw"><table>
+    <thead><tr><th>事実</th><th>戦略への含意</th></tr></thead>
+    <tbody>
+      <tr><td>PBR1倍割れ銘柄が<br>全体の約20%まで減少</td><td><b>「低PBRを買うだけ」の局面は終盤。</b>2023年からの是正相場で拾いやすい銘柄は既に買われた。残っている低PBR株は「安いなりの理由（構造的低収益・親子上場・成長性欠如）」を抱えている確率が上がっている。<b>選別が不可欠</b></td></tr>
+      <tr><td>政策金利1.00%、<br>年内追加利上げ観測</td><td>金利上昇は<b>銀行・保険にプラス</b>、高PER成長株・不動産・借入依存企業にマイナス。バリュー優位の地合いは続きやすい。一方で<b>ネットキャッシュが厚い企業は運用益改善</b>という副次効果もある</td></tr>
+      <tr><td>日経平均は6月高値から<br>約11%調整した水準</td><td>年初来のレンジが50,558〜72,831円と<b>非常に幅広い＝ボラティリティが高い年</b>。中期でも一括投資ではなく<b>分割購入</b>が合理的</td></tr>
+      <tr><td>9月入り後は日米金利上昇・<br>中東情勢で売り優勢</td><td>短期の下押しは、中期投資家にとっては仕込みの機会になり得る。ただし<b>金利上昇が業績に効く銘柄かどうか</b>を必ず確認</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tip"><b>中期（半年〜2年）の勝ち筋。</b>この期間は「万年割安のまま放置」が最大の敵です。単に安い銘柄ではなく、<b>2年以内に評価が変わる引き金（カタリスト）を持つ割安株</b>を選ぶことが、このスタイル・この期間での本質です。</div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="num">02</span>スクリーニング条件（そのまま入力できる形）</h2>
+  <p class="lead">証券会社のスクリーナー（SBI・楽天・マネックス・松井など）にそのまま入れられる条件です。<b>まず「A：足切り」で危険銘柄を除外</b>してから、B・Cで絞ります。</p>
+
+  <h3>A. 足切り条件（これを満たさない銘柄は検討しない）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>項目</th><th>条件</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>営業CF</td><td class="nw">直近3期すべて黒字</td><td>黒字倒産・利益の質の悪さを排除。バリュー投資で最も効く足切り</td></tr>
+      <tr><td>自己資本比率</td><td class="nw">40%以上<span class="formula">（金融・不動産・商社は除外条件から外す）</span></td><td>中期で金利上昇局面。財務の弱い割安株は「安いまま更に安く」なりやすい</td></tr>
+      <tr><td>1日平均売買代金</td><td class="nw">1億円以上</td><td>下落時に逃げられない低流動性銘柄を排除</td></tr>
+      <tr><td>時価総額</td><td class="nw">300億円以上</td><td>中期保有では機関投資家の買いが入る規模が必要（アクティビスト狙いなら200億円程度まで下げてもよい）</td></tr>
+      <tr><td>継続企業の前提<br>（GC注記）</td><td class="nw">なし</td><td>該当すれば無条件で対象外</td></tr>
+      <tr><td>直近の増資・CB</td><td class="nw">直近1年なし</td><td>希薄化は割安度そのものを毀損する</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>B. 割安性（いずれか2つ以上を満たす）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>条件</th><th>補足</th></tr></thead>
+    <tbody>
+      <tr><td>PBR</td><td class="nw">1.0倍以下</td><td>ただし<b>0.4倍未満は要警戒</b>。市場が構造的な問題を織り込んでいる可能性が高い</td></tr>
+      <tr><td>予想PER</td><td class="nw">13倍以下</td><td>実績ではなく<b>予想</b>PERで。特別利益で膨らんだ利益は除いて考える</td></tr>
+      <tr><td>EV/EBITDA</td><td class="nw">7倍以下</td><td>現金・借金込みの実質価格。PBRの罠を補正できる</td></tr>
+      <tr><td>配当利回り</td><td class="nw">3.0%以上</td><td>中期保有の待ち時間を配当で埋める。<b>ただし5%超は減配の織り込みを疑う</b></td></tr>
+      <tr><td>ネットキャッシュ<br>／時価総額</td><td class="nw">30%以上</td><td>該当すればアクティビストや自社株買いの対象になりやすい</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>C. 質（バリュートラップ回避。最低3つ）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>条件</th><th>狙い</th></tr></thead>
+    <tbody>
+      <tr><td>ROE</td><td class="nw">8%以上</td><td>低PBR×低ROEは「安いまま放置」の典型。<b>ここが最重要のフィルター</b></td></tr>
+      <tr><td>営業利益率</td><td class="nw">5%以上かつ改善傾向</td><td>価格転嫁力の有無</td></tr>
+      <tr><td>売上高</td><td class="nw">直近3期で減収でない</td><td>縮小産業の消去法的な安さを避ける</td></tr>
+      <tr><td>配当性向</td><td class="nw">30〜70%</td><td>低すぎ＝還元姿勢が弱い、高すぎ＝減配リスク</td></tr>
+      <tr><td>減配</td><td class="nw">過去5年で実施なし</td><td>還元の継続意思</td></tr>
+      <tr><td>自社株買い</td><td class="nw">直近2年で実施あり</td><td>資本効率への意識と、需給の下支え</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><b>条件は足しすぎない。</b>A（足切り6項目）＋B（2項目以上）＋C（3項目以上）で、通常は数十銘柄まで絞れます。ここから先は数字ではなく<b>「なぜ市場はこれを安く放置しているのか」に自分の言葉で答えられるか</b>で決めてください。</div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="num">03</span>中期（半年〜2年）で効くカタリスト</h2>
+  <p class="lead">この期間設定では「割安であること」より「<b>いつ、何によって見直されるか</b>」のほうが重要です。候補銘柄には最低1つ、明確なカタリストが必要です。</p>
+  <div class="tw"><table>
+    <thead><tr><th>カタリスト</th><th>どこで確認するか</th><th>効き方の目安</th></tr></thead>
+    <tbody>
+      <tr><td>資本効率改善の<br>開示</td><td class="formula">東証「資本コストや株価を意識した経営」開示、中期経営計画</td><td>ROE目標・PBR1倍目標を数値で掲げた企業は、実行フェーズで再評価されやすい。<b>掲げただけで具体策がない企業は要注意</b></td></tr>
+      <tr><td>大型自社株買い</td><td class="formula">適時開示、決算説明資料</td><td>時価総額比3%超はインパクト大。<b>発表だけで実行が遅い企業もある</b>ので取得進捗を毎月確認</td></tr>
+      <tr><td>政策保有株の<br>売却・縮減</td><td class="formula">有価証券報告書の政策保有株式欄</td><td>売却益＋資産圧縮でROE改善。金融・製造業の大型バリュー株で進行中</td></tr>
+      <tr><td>親子上場の解消</td><td class="formula">親会社の資本政策、大量保有報告</td><td>TOB・完全子会社化はプレミアム付き。中期の代表的なアップサイド</td></tr>
+      <tr><td>アクティビストの<br>参入</td><td class="formula">大量保有報告書（5%ルール）</td><td>還元強化・事業売却の圧力。ただし対立が長期化するケースもある</td></tr>
+      <tr><td>金利上昇の<br>業績寄与</td><td class="formula">決算説明資料の金利感応度</td><td>銀行・保険は利ざや改善が数値で開示される。中期で最も見通しやすいカタリスト</td></tr>
+      <tr><td>構造改革・<br>不採算事業撤退</td><td class="formula">中期経営計画、特別損失の計上</td><td>一時的な赤字の後に利益率が跳ねる。半年〜2年のタイムラインに合いやすい</td></tr>
+      <tr><td>業績の<br>上方修正</td><td class="formula">四半期進捗率、会社計画の保守性</td><td>Q2で進捗60%超なら上方修正の可能性。割安株では特に株価反応が大きい</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="num">04</span>調査の出発点になりうるセクターと銘柄</h2>
+  <p class="lead">
+    以下は<b>私が財務データを検証できていない情報</b>です。Web検索の結果に登場した名前と、記事が示していた数値を出典付きで並べたに過ぎません。
+    <b>推奨銘柄ではなく、02のスクリーニングを自分で通すための出発点</b>としてお使いください。
+  </p>
+
+  <h3>セクター観点（相場環境から導ける部分）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>セクター</th><th>強気の論拠</th><th>注意点</th></tr></thead>
+    <tbody>
+      <tr><td>銀行</td><td>政策金利1.00%＋年内追加利上げ観測。利ざや改善が業績に直結し、<b>中期で最も読みやすいカタリスト</b>。株式分割や還元強化の動きも報じられている（三井住友FG、大垣共立銀、阿波銀など）</td><td>利上げは相当程度株価に織り込み済み。<b>「利上げがあれば上がる」ではなく「どこまで織り込まれたか」</b>で判断。与信費用の増加も中期のリスク</td></tr>
+      <tr><td>保険・<br>ノンバンク</td><td>金利上昇の恩恵を受けつつ、銀行ほど注目されていない領域がある。政策保有株の縮減も進行中</td><td>資産運用の含み損益が金利で振れる。ソルベンシー関連の開示確認が必要</td></tr>
+      <tr><td>海運</td><td>PBRが低位で配当利回りが高い銘柄が並ぶ（例：川崎汽船9107はPBR0.84倍・予想利回り5.32%との記載）</td><td><b>典型的な「低PERの罠」セクター。</b>川崎汽船は2026年3月期に経常64.6%減益、2027年3月期も減益予想ながら年間配当120円維持の方針。<b>減益下での配当維持＝配当性向の上昇</b>であり、持続性の検証が必須</td></tr>
+      <tr><td>自動車</td><td>ホンダ（7267）は2026年1月時点でPBR0.86倍・予想利回り4.71%との記載。トヨタもバリュー株として挙げられている</td><td>数値が<b>2026年1月時点と古い</b>ため要再確認。為替感応度が高く、円高は業績に逆風</td></tr>
+      <tr><td>素材・住設</td><td>LIXIL、東ソーなどがPBR1倍割れ・高配当の文脈で挙げられている</td><td>景気敏感で業績変動が大きい。中期では在庫循環と原材料価格の確認が必要</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>名前が挙がった銘柄（すべて要検証）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>銘柄</th><th>コード</th><th>記事にあった数値</th><th>まず確認すべきこと</th></tr></thead>
+    <tbody>
+      <tr><td>川崎汽船<span class="tag tag-v">要検証</span></td><td class="nw">9107</td><td class="formula">PBR 0.84倍<br>予想配当利回り 5.32%<br>26/3期 経常−64.6%</td><td>配当性向と営業CFで配当の持続性。市況（運賃・傭船料）の位置。減益局面での還元方針の根拠</td></tr>
+      <tr><td>本田技研工業<span class="tag tag-v">要検証</span></td><td class="nw">7267</td><td class="formula">PBR 0.86倍<br>予想利回り 4.71%<br><b>※2026年1月時点</b></td><td>最新の株価指標に更新。為替前提と感応度。二輪／四輪の収益構成。自社株買いの継続性</td></tr>
+      <tr><td>LIXIL<span class="tag tag-v">要検証</span></td><td class="nw">5938</td><td class="formula">配当利回り上位<br>「減益でも増配・安定配当」</td><td>減益下の増配の原資（FCFで賄えているか）。住宅着工の動向。有利子負債の水準</td></tr>
+      <tr><td>日本郵船<span class="tag tag-v">要検証</span></td><td class="nw">9101</td><td class="formula">PBR1倍割れ・高配当<br>として言及</td><td>川崎汽船と同じ論点。ONE持分の収益寄与と市況感応度</td></tr>
+      <tr><td>東ソー<span class="tag tag-v">要検証</span></td><td class="nw">4042</td><td class="formula">PBR1倍割れ・高配当<br>として言及</td><td>市況product（塩ビ・苛性ソーダ）の価格サイクル。設備投資負担とFCF</td></tr>
+      <tr><td>三井住友FG<span class="tag tag-v">要検証</span></td><td class="nw">8316</td><td class="formula">「株式分割＋還元」で<br>選別対象として言及</td><td>利上げの織り込み度合い。金利感応度の開示値。すでにPBR1倍を超えていないかの確認</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><b>この表の使い方。</b>ここに載っているから買う、ではありません。<b>02の条件A→B→Cを順に当てて、落ちたら捨てる</b>ための入口です。特に海運2社は「安い理由がある」典型例で、割安バリューの教科書的な検証対象になります。</div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="num">05</span>個別銘柄チェックシート</h2>
+  <p class="lead">候補1銘柄につき、この表を1枚埋めてください。<b>埋まらない項目がある＝まだ買える段階ではない</b>という判定に使えます。</p>
+  <div class="tw"><table>
+    <thead><tr><th>項目</th><th>確認先</th><th>記入欄</th></tr></thead>
+    <tbody>
+      <tr><td>銘柄名／コード</td><td class="formula">—</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>株価／時価総額</td><td class="formula">証券会社</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>予想PER／PBR／EV/EBITDA</td><td class="formula">証券会社・株探</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>配当利回り／配当性向</td><td class="formula">決算短信</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>ROE／ROA／営業利益率（3期分）</td><td class="formula">決算短信・IRBANK</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>営業CF／FCF（3期分）</td><td class="formula">キャッシュフロー計算書</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>自己資本比率／有利子負債</td><td class="formula">貸借対照表</td><td class="formula">&nbsp;</td></tr>
+      <tr><td><b>なぜ安いのか（市場の見方）</b></td><td class="formula">アナリストレポート・報道</td><td class="formula">&nbsp;</td></tr>
+      <tr><td><b>その見方は間違っているか（自分の仮説）</b></td><td class="formula">自分で書く</td><td class="formula">&nbsp;</td></tr>
+      <tr><td><b>カタリストと想定時期</b></td><td class="formula">中計・適時開示</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>目標株価と根拠</td><td class="formula">PER○倍×想定EPS 等</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>損切り価格と根拠</td><td class="formula">直近安値・−15%等</td><td class="formula">&nbsp;</td></tr>
+      <tr><td>仮説が崩れる条件</td><td class="formula">自分で書く</td><td class="formula">&nbsp;</td></tr>
+    </tbody>
+  </table></div>
+
+  <ul class="chk">
+    <li>直近の決算短信を1本、最初から最後まで読んだ</li>
+    <li>キャッシュフロー計算書の3期推移を見た</li>
+    <li>中期経営計画または決算説明資料でカタリストを確認した</li>
+    <li>同業他社2社と指標を比較した</li>
+    <li>「なぜ安いのか」に自分の言葉で答えられる</li>
+    <li>買う前に損切り価格と売却条件を決めた</li>
+  </ul>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="num">06</span>中期投資の売買ルール</h2>
+  <div class="tw"><table>
+    <thead><tr><th>項目</th><th>ルール案</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>銘柄数</td><td>5〜8銘柄</td><td>これ未満は集中しすぎ、これ超は管理不能。セクターは3つ以上に分ける</td></tr>
+      <tr><td>1銘柄の上限</td><td>投資総額の15%まで</td><td>バリュー株は個別の落とし穴（減損・不祥事）が起きやすい</td></tr>
+      <tr><td>買い方</td><td>2〜3回に分割</td><td>年初来レンジが50,558〜72,831円と広い＝一括は不利</td></tr>
+      <tr><td>損切り</td><td>−20%、または投資仮説の崩壊</td><td>バリュー株は短期の値動きが荒いので、狭すぎる損切りは機能しない。<b>価格より仮説の崩壊を優先</b></td></tr>
+      <tr><td>利確</td><td>PBR1倍回復、目標PER到達、<br>またはカタリスト消化</td><td>中期は「上がるまで持つ」ではなく<b>「理由がなくなったら売る」</b></td></tr>
+      <tr><td>見直し頻度</td><td>四半期決算ごと（年4回）</td><td>進捗率と仮説の有効性を確認。日々の株価は見なくてよい</td></tr>
+      <tr><td>撤退条件</td><td>2年経ってカタリストが<br>1つも実現しない</td><td>バリュートラップの判定期限をあらかじめ決めておく</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <h2><span class="num">07</span>この局面で特に注意すべきこと</h2>
+  <div class="tw"><table>
+    <thead><tr><th>リスク</th><th>内容と対処</th></tr></thead>
+    <tbody>
+      <tr><td>低PBR相場の<br>終盤</td><td>PBR1倍割れが約20%（2018年以来の低水準）まで減った＝<b>簡単な機会は取り尽くされている</b>。残った低PBR株を無差別に買うのは、この局面では危険。ROEと改善カタリストで必ず選別する</td></tr>
+      <tr><td>減益下の<br>高配当</td><td>海運などで「減益予想でも配当維持」が起きている。<b>配当利回りの高さが減益の織り込みである</b>可能性を必ず疑い、営業CFで配当が賄えているか確認する</td></tr>
+      <tr><td>利上げの<br>織り込み</td><td>9月利上げは「織り込み8割前後」と報じられている。<b>すでに株価に入っている材料で買うと高値掴みになる</b>。銀行株を見るなら、ターミナルレート2.5%まで織り込んだ場合の利益水準まで試算する</td></tr>
+      <tr><td>高ボラティリティ</td><td>年初来で50,558〜72,831円のレンジ。中期でも一括投資は避け、下落局面を仕込みに使える資金余力を残す</td></tr>
+      <tr><td>情報の鮮度</td><td>本シートの個別銘柄の数値は<b>最新ではない可能性が高い</b>（ホンダの数値は2026年1月時点）。必ず最新の決算短信で上書きすること</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section id="s8">
+  <h2><span class="num">08</span>次にやること</h2>
+  <ol class="flow">
+    <li><b>スクリーナーに02の条件を入力する</b><span>お使いの証券会社のスクリーニング機能でA→B→Cの順に条件を入れ、20〜40銘柄まで絞る</span></li>
+    <li><b>結果リストを私に渡す</b><span>銘柄名・コード・PBR・予想PER・配当利回り・ROE・自己資本比率を貼っていただければ、この基準に沿って優先順位づけと論点整理を行います</span></li>
+    <li><b>上位5〜8銘柄の決算短信を読む</b><span>特にキャッシュフロー計算書と、中期経営計画のカタリスト部分</span></li>
+    <li><b>チェックシート（05）を埋める</b><span>「なぜ安いのか」に答えられない銘柄は、この時点で外す</span></li>
+    <li><b>買う前に売り方を決める</b><span>目標株価・損切り価格・仮説が崩れる条件を書いてから、分割で買い始める</span></li>
+  </ol>
+</section>
+
+<div class="disclaimer">
+  <b>ご注意</b>：本資料は投資判断のための一般的な整理であり、特定銘柄の売買を推奨するものではありません。
+  記載した個別銘柄の数値はWeb検索結果に含まれていた第三者の記載であり、作成者が原資料で検証したものではなく、
+  時点も統一されていません（一部は2026年1月時点の数値です）。実際の投資判断の前に、必ず最新の決算短信・
+  有価証券報告書・証券会社の情報でご確認ください。投資は元本を割り込む可能性があり、最終的な判断と責任は
+  ご自身に帰属します。
+</div>
+
+<footer>
+  日本株・割安バリュー 中期投資 選定シート ／ v1 ／ 2026-09-08 作成
+</footer>
+
+</div>
